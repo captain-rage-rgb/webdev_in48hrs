@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Global Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        header {
+            background-color: #1f3c6d;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        /* Home Button */
+        .home-button {
+            background-color: #f4b400;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-size: 20px;
+            border-radius: 50px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .home-button:hover {
+            background-color: #dcb200;
+            transform: scale(1.1);
+        }
+
+        /* Landing Page */
+        .landing-page {
+            background-image: url('money.jpg'); /* Replace with your image URL */
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 100px 20px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .landing-page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5); /* Dark overlay */
+            z-index: 1;
+        }
+
+        .landing-page h1 {
+            font-size: 60px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+            z-index: 2;
+        }
+
+        .landing-page p {
+            font-size: 28px;
+            margin-bottom: 40px;
+            z-index: 2;
+        }
+
+        .cta-button {
+            background-color: #f4b400;
+            color: white;
+            padding: 15px 40px;
+            text-decoration: none;
+            font-size: 22px;
+            border-radius: 50px;
+            transition: background-color 0.3s, transform 0.3s;
+            margin: 10px;
+            z-index: 2;
+        }
+
+        .cta-button:hover {
+            background-color: #dcb200;
+            transform: scale(1.1);
+        }
+
+        /* Sign Up Page */
+        .form-page {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Left Section (Sign-Up Form) */
+        .login-form {
+            flex: 1;
+            background-color: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .login-header {
+            color: #8bc34a;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        form label {
+            font-size: 1rem;
+            margin: 0.5rem 0 0.25rem;
+            display: block;
+        }
+
+        form input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1.5rem;
+            border: none;
+            border-radius: 5px;
+        }
+
+        form button {
+            background-color: #8bc34a;
+            color: #000;
+            padding: 0.8rem;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .tagline {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #fff;
+        }
+
+        /* Expense Form Page */
+        .expense-form {
+            background-image: url('vibrant-background.jpg'); /* Replace with your vibrant image */
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            color: white;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .form-container {
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 15px;
+            width: 60%;
+            height: 80%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .form-container h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        label, input {
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+
+        input {
+            padding: 10px;
+            width: 80%;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: 1px solid #fff;
+        }
+
+        button {
+            background-color: #f4b400;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #dcb200;
+            transform: scale(1.05);
+        }
+
+        /* Chart Container */
+        .chart-container {
+            margin-top: 20px;
+            width: 80%;
+            max-width: 800px;
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <a href="#" class="home-button" id="home-button">Home</a>
+    </header>
+
+    <!-- Landing Page -->
+    <section id="landing" class="landing-page">
+        <h1>Expense Manager</h1>
+        <p>Every coin matters, so we count them for you</p>
+        <a href="#" id="sign-in-button" class="cta-button">Sign In</a>
+        <a href="#" id="sign-up-button" class="cta-button">Sign Up</a>
+    </section>
+
+    <!-- Sign Up Page -->
+    <section id="sign-up" class="form-page" style="display:none;">
+        <div class="login-form">
+            <h1 class="login-header">Sign Up</h1>
+            <form id="signup-form">
+                <label for="signup-email">Email:</label>
+                <input type="email" id="signup-email" placeholder="Enter your email" required>
+
+                <label for="signup-password">Set Password:</label>
+                <input type="password" id="signup-password" placeholder="Set your password" required>
+
+                <label for="confirm-password">Confirm Password:</label>
+                <input type="password" id="confirm-password" placeholder="Confirm your password" required>
+
+                <button type="submit">Submit</button>
+            </form>
+            <p class="tagline">Where every dollar feels at home</p>
+        </div>
+    </section>
+
+    <!-- Sign In Page -->
+    <section id="sign-in" style="display:none;">
+        <div class="login-form">
+            <h1 class="login-header">Sign In</h1>
+            <form id="signin-form">
+                <label for="signin-email">Email:</label>
+                <input type="email" id="signin-email" placeholder="Enter your email" required>
+
+                <label for="signin-password">Password:</label>
+                <input type="password" id="signin-password" placeholder="Enter your password" required>
+
+                <button type="submit">Sign In</button>
+            </form>
+            <p class="tagline">Login to access your data</p>
+        </div>
+    </section>
+
+    <!-- Expense Form Page -->
+    <section id="expense-form" style="display:none;">
+        <div class="form-container">
+            <h1>Add New Expense</h1>
+            <form id="expense-form">
+                <label for="expense-description">Expense Description:</label>
+                <input type="text" id="expense-description" placeholder="Expense name" required>
+
+                <label for="expense-amount">Amount:</label>
+                <input type="number" id="expense-amount" placeholder="Enter the amount" required>
+
+                <button type="submit">Add Expense</button>
+            </form>
+
+            <!-- Chart Container -->
+            <div class="chart-container">
+                <canvas id="expense-chart"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Mock user data
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        let currentUser = null;
+
+        // Handling Sign-Up Form
+        document.getElementById('signup-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+
+            users.push({ email, password, expenses: [] });
+            localStorage.setItem('users', JSON.stringify(users));
+            alert('User signed up successfully! You can now sign in.');
+            document.getElementById('sign-up').style.display = 'none';
+            document.getElementById('sign-in').style.display = 'block';
+        });
+
+        // Handling Sign-In Form
+        document.getElementById('signin-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('signin-email').value;
+            const password = document.getElementById('signin-password').value;
+
+            currentUser = users.find(user => user.email === email && user.password === password);
+            if (!currentUser) {
+                alert('Invalid email or password!');
+                return;
+            }
+
+            alert('Signed in successfully!');
+            document.getElementById('sign-in').style.display = 'none';
+            document.getElementById('expense-form').style.display = 'block';
+            updateChart();
+        });
+
+        // Handling Expense Form Submission
+        document.getElementById('expense-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const description = document.getElementById('expense-description').value;
+            const amount = parseFloat(document.getElementById('expense-amount').value);
+
+            if (!description || isNaN(amount)) {
+                alert('Please provide valid expense details.');
+                return;
+            }
+
+            currentUser.expenses.push({ description, amount });
+            localStorage.setItem('users', JSON.stringify(users));
+
+            document.getElementById('expense-description').value = '';
+            document.getElementById('expense-amount').value = '';
+            updateChart();
+        });
+
+        // Update Chart with Expenses
+        function updateChart() {
+            const expenses = currentUser.expenses;
+            const expenseLabels = expenses.map(exp => exp.description);
+            const expenseAmounts = expenses.map(exp => exp.amount);
+
+            const ctx = document.getElementById('expense-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: expenseLabels,
+                    datasets: [{
+                        label: 'Expenses',
+                        data: expenseAmounts,
+                        backgroundColor: ['#ff9999', '#66b3ff', '#99ff99', '#ffcc99'],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label:
