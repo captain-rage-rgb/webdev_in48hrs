@@ -57,7 +57,7 @@
 
         /* Landing Page */
         .landing-page {
-            background-image: url('money.jpg'); /* Replace with your image URL */
+            background-image: url(https://static.vecteezy.com/system/resources/thumbnails/029/596/552/small_2x/cash-gold-coin-explosion-ai-generated-photo.jpg); /* Replace with your image URL */
             background-size: cover;
             background-position: center;
             color: white;
